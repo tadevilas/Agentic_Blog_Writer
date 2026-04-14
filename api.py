@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import os
+import re
+import datetime
 
 from graph.workflow import graph
 
@@ -31,10 +33,16 @@ async def generate_blog(request: BlogRequest):
 
     os.makedirs("blogs", exist_ok=True)
 
-    filename = query.replace(" ", "_").lower() + ".md"
-    filepath = f"blogs/{filename}"
+    safe_query = re.sub(r'[^a-zA-Z0-9_]', '', query.replace(" ", "_").lower())
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    filename = f"{safe_query}_{timestamp}.md"
+    filepath = os.path.join("blogs", filename)
 
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(blog_content)
 
-    return {"filepath": f"File Saved on Below Location {filepath}" } # 
+    return {
+        "message": "Blog generated successfully",
+        "filepath": f"File Saved on Below Location {filepath}" 
+        } # 
