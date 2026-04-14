@@ -1,0 +1,12 @@
+langchain 
+langgraph 
+langchain-community
+duckduckgo-search
+pydantic
+ollama
+python-dotenv
+
+tavily-python
+langchain_groq 
+chromadb
+sentence-transformers
